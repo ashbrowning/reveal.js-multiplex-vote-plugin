@@ -1,0 +1,24 @@
+{
+  "name": "reveal-multiplex-vote",
+  "version": "0.0.0",
+  "description": "RevealJS with multiplexing and client-voting",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "reveal",
+    "js",
+    "revealJS",
+    "voting"
+  ],
+  "engines" : {
+    "node": ">=4.0.0"
+  },
+  "author": "Ash Browning",
+  "license": "ISC",
+  "dependencies": {
+    "reveal.js": "^3.3.0"
+  }
+}
