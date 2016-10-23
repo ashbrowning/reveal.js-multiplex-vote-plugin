@@ -26,6 +26,7 @@ io.on( 'connection', function( socket ) {
 });
 
 app.use('/node_modules', staticDir(path.join(__dirname, 'node_modules')));
+app.use('/bower_components', staticDir(path.join(__dirname, 'bower_components')));
 app.use('/plugin', staticDir(path.join(__dirname, 'plugin')));
 app.use('/static', staticDir(path.join(__dirname, 'static')));
 
