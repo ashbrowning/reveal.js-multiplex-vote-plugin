@@ -1,43 +1,61 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<link rel="stylesheet" href="../node_modules/reveal.js/css/reveal.css">
-		<link rel="stylesheet" href="../node_modules/reveal.js/css/theme/black.css">
+	<title>reveal.js</title>
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="../node_modules/reveal.js/lib/css/zenburn.css">
+	<link rel="stylesheet" href="../node_modules/reveal.js/css/reveal.css">
+	<link rel="stylesheet" href="../node_modules/reveal.js/css/theme/black.css">
 
-		<!-- Printing and PDF exports -->
-		<script>
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="../node_modules/reveal.js/lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
 			var link = document.createElement( 'link' );
 			link.rel = 'stylesheet';
 			link.type = 'text/css';
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'node_modules/reveal.js/css/print/pdf.css' : 'node_modules/reveal.js/css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>
 				<section>
-					<h2>Vote 1</h2>
-					<vote id="vote1">
-							<ul>
-								<li>Option 1</li>
-								<li>Option 2</li>
-								<li>Option 3</li>
-							</ul>
-					</vote>
+					<h1>Master 1</h1>
 				</section>
-				<section>Master 2</section>
+
 				<section>
-				<h2>Vote 2</h2>
-					<vote id="vote2">
+					<h4>Master 1</h4>
+					<h2>Option 1</h2>
+				</section>
+
+				<section>
+					<h4>Master 1</h4>
+					<h2>Option 2</h2>
+				</section>
+
+				<section>
+					<h4>Master 1</h4>
+					<h2>Option 3</h2>
+				</section>
+			</section>
+
+			<section id="vote1">
+				<section class="vote-prep">
+					<h1>Master 1</h1>
+					<h4>Voting about to begin</h4>
+				</section>
+
+				<section class="vote">
+					<h2>Vote 1 Begins</h2>
+					<vote>
 						<ul>
 							<li>Option 1</li>
 							<li>Option 2</li>
@@ -45,14 +63,16 @@
 						</ul>
 					</vote>
 				</section>
-			</div>
+				<section class="vote-result">Winner is!</section>
+			</section>
 		</div>
+	</div>
 
-		<script src="../node_modules/reveal.js/lib/js/head.min.js"></script>
-		<script src="../node_modules/reveal.js/js/reveal.js"></script>
-		<script src="../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../node_modules/reveal.js/lib/js/head.min.js"></script>
+	<script src="../node_modules/reveal.js/js/reveal.js"></script>
+	<script src="../bower_components/jquery/dist/jquery.js"></script>
 
-		<script>
+	<script>
 			// More info https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
 				history: true,
@@ -76,5 +96,6 @@
 				]
 			});
 		</script>
-	</body>
+</body>
+
 </html>

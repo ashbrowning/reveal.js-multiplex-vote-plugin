@@ -6,6 +6,7 @@
 
 		<title>reveal.js</title>
 
+		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
 		<link rel="stylesheet" href="../node_modules/reveal.js/css/reveal.css">
 		<link rel="stylesheet" href="../node_modules/reveal.js/css/theme/black.css">
 
@@ -24,26 +25,27 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>
-					<h2>Vote 1 client</h2>
-					<vote id="vote1">
-						<ul>
-							<li>Option 1</li>
-							<li>Option 2</li>
-							<li>Option 3</li>
-						</ul>
-					</vote>
+				<section>Dummy section</section>
+				<section id="vote1">
+					<section class="vote-prep">Vote Prep</section>
+					<section class="vote">Vote </section>
+					<section class="vote-result">Vote result</section>
 				</section>
-				<section>Client 2</section>
 				<section>
 				<h2>Vote 2 client</h2>
-					<vote id="vote2">
-						<ul>
-							<li>Option 1</li>
-							<li>Option 2</li>
-							<li>Option 3</li>
-						</ul>
-					</vote></section>
+					<vote>
+						<!--<div class="row">-->
+							<button type="button" class="btn btn-default btn-lg btn-block col-md-12">Option 1</button>
+						<!--</div>-->
+						<!--<div class="row">-->
+							<button type="button" class="btn btn-default btn-lg btn-block col-md-12">Option 2</button>
+						<!--</div>
+						<div class="row">-->
+							<button type="button" class="btn btn-default btn-lg btn-block col-md-12">Option 3</button>
+						<!--</div>-->
+
+					</vote>
+				</section>
 			</div>
 		</div>
 

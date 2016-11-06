@@ -1,47 +1,59 @@
-(function() {
+(function () {
 
 	// Don't emit events from inside of notes windows
-	if ( window.location.search.match( /receiver/gi ) ) { return; }
+	if (window.location.search.match(/receiver/gi)) { return; }
 
 	var multiplex = Reveal.getConfig().multiplex;
 
-	var socket = io.connect( multiplex.url );
+	var socket = io.connect(multiplex.url);
 
-	function post() {
+	// function post() {
 
-		var messageData = {
-			state: Reveal.getState(),
-			secret: multiplex.secret,
-			socketId: multiplex.id
-		};
+	// 	var messageData = {
+	// 		state: Reveal.getState(),
+	// 		secret: multiplex.secret,
+	// 		socketId: multiplex.id
+	// 	};
 
-		socket.emit( 'multiplex-statechanged', messageData );
+	// 	socket.emit('multiplex-statechanged', messageData);
 
-	};
+	// };
 
+	function convertNodeListToArray(nodeList) {
+		return Array.prototype.slice.call(nodeList);
+	}
+
+	function getParentSectionId(slideEl) {
+		var parentEl = slideEl.parentNode;
+		if (parentEl.nodeName !== 'SECTION') {
+			console.log('Vote section must have a parent section');
+			return null;
+		}
+
+		return parentEl.id;
+	}
 
 	function onSlideUpdate() {
 		var currentSlide = Reveal.getCurrentSlide();
 
-		//Try to get the first vote tag
-		var voteEl = currentSlide.querySelector('vote');
+		//Does it have a class of vote, vote-prep or vote-result?
+		var classList = convertNodeListToArray(currentSlide.classList);
 
-		if(voteEl) {
-			processVoteEl(voteEl);
+		if (classList.indexOf('vote-prep') > -1) {
+			changeClientSlide(getParentSectionId(currentSlide), 'vote-prep');
+		} else if (classList.indexOf('vote') > -1) {
+			changeClientSlide(getParentSectionId(currentSlide), 'vote');
+		} else if (classList.indexOf('vote-result') > -1) {
+			changeClientSlide(getParentSectionId(currentSlide), 'vote-result');
 		}
-
-		//querySelectorAll
 	}
 
-	function processVoteEl(voteEl) {
-
-		//get ID of vote tag, pass message to client
-		var id = '#' + voteEl.id;
-		//could do it via order index?
+	function changeClientSlide(id, className) {
 
 		var messageData = {
 			messageType: 'vote',
-			selector: id,
+			id: id,
+			className: className,
 			secret: multiplex.secret,
 			socketId: multiplex.id
 		};
@@ -52,7 +64,7 @@
 	}
 
 	// Monitor events that trigger a change in state
-	Reveal.addEventListener( 'slidechanged', onSlideUpdate );
+	Reveal.addEventListener('slidechanged', onSlideUpdate);
 	// Reveal.addEventListener( 'fragmentshown', post );
 	// Reveal.addEventListener( 'fragmenthidden', post );
 	// Reveal.addEventListener( 'overviewhidden', post );
@@ -60,4 +72,4 @@
 	// Reveal.addEventListener( 'paused', post );
 	// Reveal.addEventListener( 'resumed', post );
 
-}());
+} ());
