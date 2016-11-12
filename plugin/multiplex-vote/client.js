@@ -8,20 +8,25 @@
 		return Array.prototype.slice.call(nodeList);
 	}
 
+	function getRootSections() {
+		var sectionElementArray = convertNodeListToArray(document.querySelectorAll('section'));
+		return sectionElementArray.reduce(function (arr, sectionEl) {
+			if (sectionEl.parentNode.nodeName !== 'SECTION') {
+				arr.push(sectionEl);
+			}
+			return arr;
+		}, []);
+	}
+
 	/**
 	 * Obtain the h (horizontal) slide index for a given section element
 	 * This section element must not be a nested section.
 	 */
 	function getHIndex(section) {
 		var sectionElementArray = convertNodeListToArray(document.querySelectorAll('section'));
-		var parentSecetionElementArray = sectionElementArray.reduce(function (arr, sectionEl) {
-			if (sectionEl.parentNode.nodeName !== 'SECTION') {
-				arr.push(sectionEl);
-			}
-			return arr;
-		}, []);
+		var parentSectionElementArray = getRootSections();
 
-		return parentSecetionElementArray.findIndex(function (el) {
+		return parentSectionElementArray.findIndex(function (el) {
 			return el === section;
 		});
 	}
@@ -54,29 +59,6 @@
 		var vIndex = getVIndex(parentSection, voteSection);
 
 		Reveal.slide(hIndex, vIndex);
-
-
-		//Given the vote selector, find it, and find which slide to go to
-
-		// var voteSelector = data.selector;
-
-		// //get vote tage
-		// var voteEl = document.querySelector(voteSelector);
-		// if (!voteEl) {
-		// 	return;
-		// }
-
-		// var voteParentEl = voteEl.parentNode;
-		// if (voteParentEl.nodeName !== 'SECTION') {
-		// 	return;
-		// }
-
-		// var sectionElementArray = convertNodeListToArray(document.querySelectorAll('section'));
-		// var index = sectionElementArray.findIndex(function(el) {
-		// 	return el === voteParentEl;
-		// });
-
-		// Reveal.slide(index);
 	}
 
 	socket.on(multiplex.id, function (data) {
@@ -93,4 +75,65 @@
 
 		// Reveal.setState(data.state);
 	});
+
+	function getSectionGivenVoteEl(voteEl) {
+
+	}
+
+	function handleVoteClickEvent(vote, option) {
+		console.log(vote + '/' + option);
+	}
+
+	function initializeVoteOptions() {
+		var voteArray = convertNodeListToArray(document.querySelectorAll('vote'));
+
+		//TODO Convert to array.forEach()
+		for (var i = 0; i < voteArray.length; ++i) {
+			var voteEl = voteArray[i];
+			var voteElVoteIdNode = voteEl.attributes.getNamedItem('data-vote-id');
+			if (!voteElVoteIdNode) {
+				continue;
+			}
+			var voteId = voteElVoteIdNode.value;
+			var buttonArray = convertNodeListToArray(voteEl.querySelectorAll('button'));
+			for (var j = 0; j < buttonArray.length; ++j) {
+				var dataAttribute = document.createAttribute('data-option-id');
+				dataAttribute.value = j;
+				var button = buttonArray[j];
+				button.attributes.setNamedItem(dataAttribute);
+				(function (optionId) {
+					button.addEventListener('click', function () {
+						handleVoteClickEvent(voteId, optionId);
+					});
+				})(j);
+			}
+		}
+	}
+
+	function initializeVoteSections() {
+		var sectionArray = getRootSections();
+
+		sectionArray.forEach(function(el) {
+			var voteEl = el.querySelector('vote');
+			if (!voteEl) {
+				return;
+			}
+
+			var sectionId = el.id;
+			if (!el.id) {
+				return;
+			}
+
+			var dataAttribute = document.createAttribute('data-vote-id');
+			dataAttribute.value = sectionId;
+			voteEl.attributes.setNamedItem(dataAttribute);
+
+		});
+	}
+
+	initializeVoteSections();
+
+	initializeVoteOptions();
+
+
 } ());
