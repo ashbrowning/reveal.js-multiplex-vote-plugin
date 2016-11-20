@@ -9,13 +9,27 @@ var app       	= express();
 var staticDir 	= express.static;
 var server    	= http.createServer(app);
 
+var VoteCounter = require('./plugin/multiplex-vote/vote-classes.js');
+var voteCounter = new VoteCounter();
+
 io = io(server);
+
 
 var opts = {
 	port: process.env.PORT || 1989,
 };
 
 io.on( 'connection', function( socket ) {
+
+	//Check if it's the master coonnecting
+	var socketType = socket.handshake.query.name || null;
+	if (socketType === 'master') {
+		socket.join('realtime-vote');
+	} else if (socketType === 'client') {
+		socket.join('client');
+	}
+
+	//Send current state on connection!
 	socket.on('multiplex-statechanged', function(data) {
 		if (typeof data.secret == 'undefined' || data.secret == null || data.secret === '') return;
 		if (createHash(data.secret) === data.socketId) {
@@ -40,6 +54,19 @@ app.get('/client', function(req, res) {
 	res.sendFile('client.html', {
 		root: path.join(__dirname, '/static/'),
 	});
+});
+
+app.get('/vote/:voteId/:option', function(req, res) {
+	var voteId = req.params.voteId;
+	var option = req.params.option;
+	voteCounter.handleVote(voteId, option);
+	res.status(200).send('Vote received');
+
+	//Todo - setup another channel for server -> master
+	io.to('realtime-vote').emit('vote-update', {
+		votes: voteCounter.getVoteTally(voteId)
+	});
+
 });
 
 app.get("/token", function(req, res) {

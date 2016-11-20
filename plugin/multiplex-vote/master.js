@@ -5,19 +5,17 @@
 
 	var multiplex = Reveal.getConfig().multiplex;
 
-	var socket = io.connect(multiplex.url);
+	var socket = io.connect(multiplex.url, {query: 'name=master'});
 
-	// function post() {
+	socket.on('vote-update', onVoteUpdate);
 
-	// 	var messageData = {
-	// 		state: Reveal.getState(),
-	// 		secret: multiplex.secret,
-	// 		socketId: multiplex.id
-	// 	};
-
-	// 	socket.emit('multiplex-statechanged', messageData);
-
-	// };
+	function onVoteUpdate(data) {
+		var dataKeys = Object.keys(data.votes);
+		dataKeys.forEach(function(index) {
+			var value = data.votes[index];
+			$(Reveal.getCurrentSlide()).find('vote li').eq(index).find('span').html(' - ' + value);
+		});
+	}
 
 	function convertNodeListToArray(nodeList) {
 		return Array.prototype.slice.call(nodeList);

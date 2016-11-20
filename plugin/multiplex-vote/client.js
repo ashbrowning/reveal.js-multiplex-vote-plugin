@@ -1,8 +1,11 @@
 (function () {
 	var multiplex = Reveal.getConfig().multiplex;
 	var socketId = multiplex.id;
-	var socket = io.connect(multiplex.url);
+	var socket = io.connect(multiplex.url, {
+		query: 'name=client',
+	});
 
+	var $ = window.jQuery;
 
 	function convertNodeListToArray(nodeList) {
 		return Array.prototype.slice.call(nodeList);
@@ -81,7 +84,13 @@
 	}
 
 	function handleVoteClickEvent(vote, option) {
-		console.log(vote + '/' + option);
+		$.ajax({
+			url: './vote/' + vote + '/' + option,
+			context: document.body,
+			success: function(){
+				console.log('sent vote!');
+			}
+		});
 	}
 
 	function initializeVoteOptions() {
