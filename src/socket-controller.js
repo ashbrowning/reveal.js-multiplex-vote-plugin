@@ -3,6 +3,7 @@ var io = require('socket.io');
 
 class SocketController {
   constructor(expressApp) {
+    this.presentationState = {};
     this.io = io(expressApp);
     this.initialiseSocketIO();
   }
@@ -13,6 +14,12 @@ class SocketController {
     this.io.on('connection', function (socket) {
 
       _this.addNewSocketToRooms(socket);
+
+      //send current slide
+      if (Object.keys(_this.presentationState).length !== 0) {
+        socket.emit(_this.presentationState.socketId, _this.presentationState);
+      }
+
       _this.setupMultiplexing(socket);
 
     });
@@ -37,6 +44,7 @@ class SocketController {
     if (typeof data.secret == 'undefined' || data.secret == null || data.secret === '') return;
     if (this.createHash(data.secret) === data.socketId) {
       data.secret = null;
+      this.presentationState = data;
       socket.broadcast.emit(data.socketId, data);
     };
   }
