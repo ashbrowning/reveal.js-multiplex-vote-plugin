@@ -13,12 +13,13 @@
     "revealJS",
     "voting"
   ],
-  "engines" : {
+  "engines": {
     "node": ">=4.0.0"
   },
   "author": "Ash Browning",
   "license": "ISC",
   "dependencies": {
+    "cookie-parser": "^1.4.3",
     "reveal.js": "^3.3.0"
   }
 }

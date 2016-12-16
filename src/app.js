@@ -3,10 +3,14 @@ var express		= require('express');
 var fs			= require('fs');
 var crypto		= require('crypto');
 var path = require('path');
+var cookieParser = require('cookie-parser')
+
 
 var app       	= express();
 var staticDir 	= express.static;
 var server    	= http.createServer(app);
+
+app.use(cookieParser())
 
 var VoteCounter = require('../plugin/multiplex-vote/vote-classes.js');
 var voteCounter = new VoteCounter();
@@ -32,6 +36,13 @@ app.get('/master', function(req, res) {
 });
 
 app.get('/client', function(req, res) {
+	var cookie = req.cookies.revealid || -1;
+
+	if (cookie === -1) {
+		var token = parseInt(Math.random() * 1000000000000, 10);
+		res.cookie('revealid', token);
+	}
+
 	res.sendFile('client.html', {
 		root: path.join(__dirname, '../static/'),
 	});
@@ -40,7 +51,11 @@ app.get('/client', function(req, res) {
 app.get('/vote/:voteId/:option', function(req, res) {
 	var voteId = req.params.voteId;
 	var option = req.params.option;
-	voteCounter.handleVote(voteId, option);
+	var revealid = req.cookies.revealid || -1;
+	if ( revealid !== -1 ) {
+		console.log('revealid', revealid);
+		voteCounter.handleVote(voteId, option, revealid);
+	}
 	res.status(200).send('Vote received');
 
   socketController.sendRealtimeVoteUpdate(voteCounter.getVoteTally(voteId));

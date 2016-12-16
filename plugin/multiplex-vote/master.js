@@ -10,6 +10,8 @@
 	socket.on('vote-update', onVoteUpdate);
 
 	function onVoteUpdate(data) {
+		//Clear the span
+		$(Reveal.getCurrentSlide()).find('vote li span').html(' - 0');
 		var dataKeys = Object.keys(data.votes);
 		dataKeys.forEach(function(index) {
 			var value = data.votes[index];
