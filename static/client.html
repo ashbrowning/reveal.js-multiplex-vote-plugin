@@ -22,6 +22,14 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'node_modules/reveal.js/css/print/pdf.css' : 'node_modules/reveal.js/css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+
+	<style>
+		.vote {
+			overflow-y: auto !important;
+			overflow-x: hidden !important;
+			height: 700px;
+		}
+	</style>
 </head>
 
 <body>
@@ -39,20 +47,16 @@
 				</section>
 				<section class="vote-result">Vote result</section>
 			</section>
-			<section>
-				<h2>Vote 2 client</h2>
-				<vote>
-					<!--<div class="row">-->
-					<button type="button" class="btn btn-default btn-lg btn-block col-md-12">Option 1</button>
-					<!--</div>-->
-					<!--<div class="row">-->
-					<button type="button" class="btn btn-default btn-lg btn-block col-md-12">Option 2</button>
-					<!--</div>
-						<div class="row">-->
-					<button type="button" class="btn btn-default btn-lg btn-block col-md-12">Option 3</button>
-					<!--</div>-->
-
-				</vote>
+			<section id="vote2">
+				<section class="vote-prep">Vote Prep</section>
+				<section class="vote">
+					<vote>
+						<button type="button" class="btn btn-default btn-lg btn-block col-md-12">Option 1</button>
+						<button type="button" class="btn btn-default btn-lg btn-block col-md-12">Option 2</button>
+						<button type="button" class="btn btn-default btn-lg btn-block col-md-12">Option 3</button>
+					</vote>
+				</section>
+				<section class="vote-result">Vote result</section>
 			</section>
 		</div>
 	</div>
@@ -64,6 +68,7 @@
 			// More info https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
 				history: true,
+				controls: false,
 
 				multiplex: {
 					// Example values. To generate your own, see the socket.io server instructions.
